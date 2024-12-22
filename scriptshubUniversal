@@ -1,12 +1,10 @@
-# 22.12.24
-
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "SCRIPTS HEAVEN 🌍 │ UNIVERSAL SCRIPT ",
-   Icon = 15807158635, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "PREPARING...",
-   LoadingSubtitle = "💎 DISCORD: YCQkDHTsXk 💎",
+   Icon = "gift", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "DONT FORGET TO SHARE US!",
+   LoadingSubtitle = "💎 DISCORD: .gg/YCQkDHTsXk 💎",
    Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -35,15 +33,76 @@ local Window = Rayfield:CreateWindow({
       Key = {"https://raw.githubusercontent.com/v3lvics/key/refs/heads/main/key"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 })
-
-
+local teleportService = game:GetService('TeleportService')
+local players = game:GetService("Players")
 local player = game.Players.LocalPlayer
 local char = player.Character
-local Tab = Window:CreateTab("Tab Example", "home")
-local Section = Tab:CreateSection("Section Example")
-local Divider = Tab:CreateDivider()
+local Tab = Window:CreateTab("Home", "home")
+local Player = Window:CreateTab("Player", "user")
+local Spy = Window:CreateTab("Client", "gamepad")
+local tab
+local patched = Tab:CreateLabel("SCRIPTS HEAVEN PATCHED: DECEMBER - 2024", "heart")
+local Paragraph = Tab:CreateParagraph({Title = "Thank you for using our Universal Script!", Content = "We are hardly working on this and we would LOVE your support by inviting people to our project. We offer more than our scripts, other scripts with bypassed Linkvertise and leaked/uncopylocked Roblox Games!"})
 
-local Toggle = Tab:CreateToggle({
+local warnesp = Spy:CreateLabel("ESP CAN NOT BE DISABLED.", "triangle-alert")
+local ESP = Spy:CreateButton({
+   Name = "ESP",
+   Callback = function(Value)
+
+local Players = game:GetService("Players")
+
+local function ApplyHighlight(Player)
+    local Connections = {}
+
+    --// Parts
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Humanoid = Character:WaitForChild("Humanoid")
+    local HightLighter = Instance.new("Highlight", Character)
+
+    local function UpdateFillColor()
+        local DefaultColor = Color3.fromRGB(255, 48, 51)
+        HightLighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or DefaultColor
+    end
+
+    local function Disconnect()
+        HightLighter:Remove()
+        
+        for _, Connection in next, Connections do
+            Connection:Disconnect()
+        end
+    end
+
+    --// Connect functions to events
+    table.insert(Connections, Player:GetPropertyChangedSignal("TeamColor"):Connect(UpdateFillColor))
+    table.insert(Connections, Humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+        if Humanoid.Health <= 0 then
+            Disconnect()
+        end
+    end))
+end
+
+local function HightLightPlayer(Player)
+    if Player.Character then
+        HightLightPlayer(Player)
+    end
+    Player.CharacterAdded:Connect(function()
+        HightLightPlayer(Player)
+    end)
+end
+
+
+--// Apply highlights to players
+    for _, Player in next, Players:GetPlayers() do
+    ApplyHighlight(Player)
+    end
+Players.PlayerAdded:Connect(ApplyHighlight)
+
+end,
+})
+
+----
+
+local Anchor = Player:CreateToggle({
    Name = "Anchor Character",
    CurrentValue = false,
    Flag = "Anchor", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -53,49 +112,81 @@ local Toggle = Tab:CreateToggle({
    end,
 })
 
-local Slider = Tab:CreateSlider({
+local GodMode = Player:CreateToggle({
+   Name = "God Mode",
+   CurrentValue = false,
+   Flag = "God", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    if Value == true then
+            char.Humanoid.MaxHealth = 10000000000000000000000000000000000000000000000000
+            char.Humanoid.Health = 10000000000000000000000000000000000000000000000000
+       else
+            char.Humanoid.MaxHealth = 100
+            char.Humanoid.Health = 100
+    end
+    end,
+})
+
+local Heal = Player:CreateButton({
+   Name = "Heal Me",
+   Callback = function()
+   char.Humanoid.Health = tonumber(char.Humanoid.MaxHealth)
+   end,
+})
+
+local Slider = Player:CreateSlider({
    Name = "Walking Speed",
-   Range = {0, 100},
+   Range = {0, 300},
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
    char.Humanoid.WalkSpeed = Value
-
-
    end,
 })
 
-local Input = Tab:CreateInput({
-   Name = "Input Example",
-   CurrentValue = "",
-   PlaceholderText = "Input Placeholder",
-   RemoveTextAfterFocusLost = false,
-   Flag = "Input1",
-   Callback = function(Text)
-   -- The function that takes place when the input is changed
-   -- The variable (Text) is a string for the value in the text box
+local KickButton = Tab:CreateButton({
+   Name = "Kick yourself",
+   Callback = function()
+   game.Players.LocalPlayer:Kick()
    end,
 })
 
-local Dropdown = Tab:CreateDropdown({
-   Name = "Dropdown Example",
-   Options = {"Option 1","Option 2"},
-   CurrentOption = {"Option 1"},
-   MultipleOptions = false,
-   Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Options)
-   -- The function that takes place when the selected option is changed
-   -- The variable (Options) is a table of strings for the current selected options
+local Rejoin = Tab:CreateButton({
+  
+   Name = "Rejoin",
+   Callback = function()
+   teleportService:Teleport(game.PlaceId)
    end,
 })
 
-Dropdown:Set({"Option 2"})
+local GiveTools = Spy:CreateButton({
+  
+   Name = "Give All Tools Possible",
+   Callback = function()
+   for i,v in pairs(game.ReplicatedStorage:GetChildren()) do
+       if v:IsA("Tool") then
+           local tool = v:Clone()
+            tool.Parent = player.Backpack
+       end
+       end
+   end,
+})
+
+local tabdiv = Tab:CreateDivider()
+
+local gameid = Tab:CreateLabel("Place ID: "..game.PlaceId, "settings")
+
+local div = Tab:CreateDivider()
+local plrage = Tab:CreateLabel("Account Age: "..player.AccountAge, "user")
+local plrname = Tab:CreateLabel("Account Name: "..player.Name, "user")
+local displayd = Tab:CreateLabel("Account Display Name: "..player.DisplayName, "user")
+
 
 Rayfield:Notify({
    Title = "SCRIPTS HEAVEN 🌍",
    Content = "Hub loaded. Enjoy exploiting! .gg/YCQkDHTsXk",
-   Duration = 4,
+   Duration = 5,
    Image = "check",
 })

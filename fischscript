@@ -1,1 +1,160 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local Window = Rayfield:CreateWindow({
+   Name = "SCRIPTS HEAVEN 🌍 │ FISCH ",
+   Icon = "gift", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "DONT FORGET TO SHARE US!",
+   LoadingSubtitle = "💎 DISCORD: .gg/YCQkDHTsXk 💎",
+   Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "SCRIPTS HEAVEN"
+   },
+
+   Discord = {
+      Enabled = true, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "YCQkDHTsXk", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = false -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "To proceed enter our valid key 🔑",
+      Subtitle = "Key Validation",
+      Note = "Get key at our Discord server for free! ", -- Use this to tell the user how to get a key
+      FileName = "SCRIPTSfknb593NDbHUB", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"https://raw.githubusercontent.com/v3lvics/key/refs/heads/main/key"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+Rayfield:Notify({
+   Title = "SCRIPTS HEAVEN 🌍",
+   Content = "Gathering Data...",
+   Duration = 3.35,
+   Image = "loader",
+})
+wait(1)
+local teleportService = game:GetService('TeleportService')
+local players = game:GetService("Players")
+local player = game.Players.LocalPlayer
+local char = player.Character
+local Tab = Window:CreateTab("Home", "home")
+local Player = Window:CreateTab("Player", "user")
+local Spy = Window:CreateTab("Teleport", "pin")
+local tab
+local patched = Tab:CreateLabel("SCRIPTS HEAVEN PATCHED: DECEMBER - 2024", "heart")
+local Paragraph = Tab:CreateParagraph({Title = "Thank you for using our Fisch Script!", Content = "We are hardly working on this and we would LOVE your support by inviting people to our project. We offer more than our scripts, other scripts with bypassed Linkvertise and leaked/uncopylocked Roblox Games!"})
+----
+
+local Anchor = Player:CreateToggle({
+   Name = "Completly Freeze Your Character",
+   CurrentValue = false,
+   Flag = "Anchor", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    player.Character.HumanoidRootPart.Anchored = Value
+   
+   end,
+})
+
+local GodMode = Player:CreateToggle({
+   Name = "God Mode",
+   CurrentValue = false,
+   Flag = "God", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    if Value == true then
+             player.Character.Humanoid.MaxHealth = 10000000000000000000000000000000000000000000000000
+             player.Character.Humanoid.Health = 10000000000000000000000000000000000000000000000000
+       else
+             player.Character.Humanoid.MaxHealth = 100
+             player.Character.Humanoid.Health = 100
+    end
+    end,
+})
+
+local Heal = Player:CreateButton({
+   Name = "Heal Me",
+   Callback = function()
+    player.Character.Humanoid.Health = tonumber(char.Humanoid.MaxHealth)
+   end,
+})
+
+local Slider = Player:CreateSlider({
+   Name = "Walking Speed",
+   Range = {0, 300},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    player.Character.Humanoid.WalkSpeed = Value
+   end,
+})
+
+local KickButton = Tab:CreateButton({
+   Name = "Kick yourself",
+   Callback = function()
+   game.Players.LocalPlayer:Kick()
+   end,
+})
+
+local Rejoin = Tab:CreateButton({
+  
+   Name = "Rejoin",
+   Callback = function()
+   teleportService:Teleport(game.PlaceId)
+   end,
+})
+
+local tabdiv = Tab:CreateDivider()
+
+local gameid = Tab:CreateLabel("Place ID: "..game.PlaceId, "settings")
+
+local div = Tab:CreateDivider()
+local plrage = Tab:CreateLabel("Account Age: "..player.AccountAge, "user")
+local plrname = Tab:CreateLabel("Account Name: "..player.Name, "user")
+local displayd = Tab:CreateLabel("Account Display Name: "..player.DisplayName, "user")
+
+
+local WalkWater = Player:CreateToggle({
+   Name = "Walk On Water (Ocean Only)",
+   CurrentValue = false,
+   Flag = "WalkWater", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+    if Value == true then
+            for i,v in pairs(game.Workspace:GetChildren()) do
+               if v:IsA("Part") and v.Name == "Ocean" then
+                  v.CanCollide = true
+               end
+            end
+       else
+         for i,v in pairs(game.Workspace:GetChildren()) do
+            if v:IsA("Part") and v.Name == "Ocean" then
+               v.CanCollide = false
+            end
+         end
+    end
+    end,
+})
+
+
+
+Rayfield:Notify({
+   Title = "SCRIPTS HEAVEN 🌍",
+   Content = "Script loaded. Enjoy exploiting! .gg/YCQkDHTsXk",
+   Duration = 5,
+   Image = "check",
+})
+
+Rayfield:Notify({
+   Title = "SCRIPTS HEAVEN 🌍",
+   Content = "This script is NOT heavily developed and will not contain alot of functions.",
+   Duration = 10,
+   Image = "landmark",
+})

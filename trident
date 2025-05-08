@@ -336,7 +336,7 @@ function FindNearestPlayer()
 	for _, v in pairs(workspace:GetChildren()) do
 		if v ~= LocalPlayer and v.Name ~= "LocalCharacter" and v:FindFirstChild("HumanoidRootPart") and v and v:FindFirstChild("LowerTorso") then
 			local TheirCharacter = v.HumanoidRootPart
-			local CharacterRoot, Visible = MyView:WorldToViewportPoint(TheirCharacter[_G.AimPart].Position)
+			local CharacterRoot, Visible = MyView:WorldToViewportPoint(v[_G.AimPart].Position)
 			if Visible then
 				local RealMag = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(CharacterRoot.X, CharacterRoot.Y)).Magnitude
 				if RealMag < dist and RealMag < FOVCircle.Radius then

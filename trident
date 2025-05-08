@@ -353,6 +353,7 @@ end
 
 UIS.InputBegan:Connect(function(bind)
 	if bind.KeyCode == Enum.KeyCode.B then
+		print("yassdg")
 		if locked == false then
 			locked = true
 			HoldingM2 = true

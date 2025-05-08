@@ -1,0 +1,122 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+	Name = "cigan-hub",
+	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+	LoadingTitle = "vyčkejte, negři vybíhají",
+	LoadingSubtitle = "od lvl 100 boss.",
+	Theme = "AmberGlow", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+	DisableRayfieldPrompts = false,
+	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = nil, -- Create a custom folder for your hub/game
+		FileName = "ciganhub"
+	},
+
+	Discord = {
+		Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+	},
+
+	KeySystem = true, -- Set this to true to use our key system
+	KeySettings = {
+		Title = "Nigger",
+		Subtitle = "Londýnské ověření",
+		Note = "Heslo fakt nedostaneš, jsi moc černý.", -- Use this to tell the user how to get a key
+		FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+		SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		Key = {"striletcerny"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+	}
+})
+
+Rayfield:Notify({
+	Title = "cigan-hub",
+	Content = "příprava šéfe...",
+	Duration = 3.35,
+	Image = "loader",
+})
+wait(3)
+local nevidimcigany = Window:CreateTab("Nevidim cigany", "home") -- Title, Image
+local Toggle = nevidimcigany:CreateToggle({
+	Name = "Videt cigany",
+	CurrentValue = false,
+	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:FindFirstChild("Head") then
+				if v.Head:FindFirstChild("ESP") then
+					v.Head.ESP.Enabled = Value
+					v.Head.ESP.tag.Text = "NJ - Cigan"
+					v.Head.ESP.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+				else
+					local newesp = Instance.new("BillboardGui")
+					newesp.Name = "ESP"
+					newesp.Parent = v.Head
+					newesp.MaxDistance = 9999999
+					newesp.AlwaysOnTop = true
+					newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+					newesp.Size = UDim2.new(0, 300, 0, 15)
+					local tag = Instance.new("TextLabel")
+					tag.Name = "tag"
+					tag.Parent = newesp
+					tag.Size = UDim2.new(1,0,1,0)
+					tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+				end
+			end
+		end
+		if Value == true then
+			Rayfield:Notify({
+				Title = "cigan-hub",
+				Content = "ted vidis nacteny cigany. Novy se automaticky pridaj.",
+				Duration = 3,
+				Image = "loader",
+			})
+		else
+			Rayfield:Notify({
+				Title = "cigan-hub",
+				Content = "cerny uz nevidis, hodne stesti.",
+				Duration = 2,
+				Image = "loader",
+			})
+		end
+	end,
+})
+local Toggle = nevidimcigany:CreateToggle({
+	Name = "videt totemy",
+	CurrentValue = false,
+	Flag = "totem", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		for i,v in pairs(workspace:GetChildren()) do
+			if v:IsA("Model") then
+				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
+					for i,a in pairs(v:GetChildren()) do
+						if a:FindFirstChild("totemesp") then
+							a.totemesp.Enabled = Value
+							a.totemesp.tag.Text = "TOTEM"
+							a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+							a.totemesp.BackgroundTransparency = 1
+						else
+							local newesp = Instance.new("BillboardGui")
+							newesp.Name = "totemesp"
+							newesp.Parent = a
+							newesp.MaxDistance = 9999999
+							newesp.AlwaysOnTop = true
+							newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+							newesp.Size = UDim2.new(0, 300, 0, 15)
+							local tag = Instance.new("TextLabel")
+							tag.Name = "tag"
+							tag.Parent = newesp
+							tag.Size = UDim2.new(1,0,1,0)
+							tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+						end
+					end
+				end
+			end
+		end
+	end,
+})

@@ -171,14 +171,14 @@ local Toggle = nevidimcigany:CreateToggle({
 	Callback = function(Value)
 		if Value == true then
 			game:GetService("UserInputService").InputBegan:Connect(function(key)
-				if key == Enum.KeyCode.MouseRightButton then
+				if key.KeyCode == Enum.KeyCode.V then
 					wait(.4)
 					local tween = game:GetService("TweenService")
 					tween:Create(game.Workspace.CurrentCamera, TweenInfo.new(1),{FieldOfView = 160}):Play()
 				end
 			end)
 			game:GetService("UserInputService").InputEnded:Connect(function(key)
-				if key == Enum.KeyCode.MouseRightButton then
+				if key.KeyCode == Enum.KeyCode.V then
 					wait(.4)
 					local tween = game:GetService("TweenService")
 					tween:Create(game.Workspace.CurrentCamera, TweenInfo.new(1),{FieldOfView = before}):Play()

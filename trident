@@ -100,7 +100,7 @@ local Toggle = nevidimcigany:CreateToggle({
 				if v:FindFirstChild("Head") then
 					if v.Head:FindFirstChild("ESP") then
 						v.Head.ESP.Enabled = Value
-						v.Head.ESP.tag.Text = "NJ - Cigan"
+						v.Head.ESP.tag.Text = "Cigan"
 						v.Head.ESP.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
 					else
 						local newesp = Instance.new("BillboardGui")
@@ -143,13 +143,13 @@ local Toggle = nevidimcigany:CreateToggle({
 							newesp.AlwaysOnTop = true
 							newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
 							newesp.Size = UDim2.new(0, 300, 0, 15)
-							local tag = Instance.new("TextLabel")
-							tag.Text = "TOTEM"
-							tag.Name = "tag"
-							tag.BackgroundTransparency = 1
-							tag.Parent = newesp
-							tag.Size = UDim2.new(1,0,1,0)
-							tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+							local ta = Instance.new("TextLabel")
+							ta.Text = "TOTEM"
+							ta.Name = "tag"
+							ta.BackgroundTransparency = 1
+							ta.Parent = newesp
+							ta.Size = UDim2.new(1,0,1,0)
+							ta.TextColor3 = Color3.fromRGB(255, 0, 4)
 						end
 					end
 				end
@@ -160,27 +160,28 @@ local Toggle = nevidimcigany:CreateToggle({
 				if v:IsA("Model") then
 					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
 						for i,a in pairs(v:GetChildren()) do
-							if a:FindFirstChild("totemesp") then
-								a.totemesp.Enabled = Value
-								a.totemesp.tag.Text = "TOTEM"
-								a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-						
-							else
-								local newesp = Instance.new("BillboardGui")
-								newesp.Name = "totemesp"
-								newesp.Parent = a
-								newesp.MaxDistance = 9999999
-								newesp.AlwaysOnTop = true
-								newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
-								newesp.Size = UDim2.new(0, 300, 0, 15)
-								local tag = Instance.new("TextLabel")
-								tag.Text = "TOTEM"
-								tag.Name = "tag"
-								tag.BackgroundTransparency = 1
-								tag.Parent = newesp
-								tag.Size = UDim2.new(1,0,1,0)
-								tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-							end
+							
+						end
+						if v.Body:FindFirstChild("totemesp") then
+							v.Body.totemesp.Enabled = Value
+							v.Body.totemesp.tag.Text = "TOTEM"
+							v.Body.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+
+						else
+							local newesp = Instance.new("BillboardGui")
+							newesp.Name = "totemesp"
+							newesp.Parent =  v.Body
+							newesp.MaxDistance = 9999999
+							newesp.AlwaysOnTop = true
+							newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+							newesp.Size = UDim2.new(0, 300, 0, 15)
+							local ta = Instance.new("TextLabel")
+							ta.Text = "TOTEM"
+							ta.Name = "tag"
+							ta.BackgroundTransparency = 1
+							ta.Parent = newesp
+							ta.Size = UDim2.new(1,0,1,0)
+							ta.TextColor3 = Color3.fromRGB(255, 0, 4)
 						end
 					end
 				end

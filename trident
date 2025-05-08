@@ -337,12 +337,13 @@ function FindNearestPlayer()
 		if v ~= LocalPlayer and v.Name ~= "LocalCharacter" and v:FindFirstChild("HumanoidRootPart") and v and v:FindFirstChild("LowerTorso") then
 			local TheirCharacter = v.HumanoidRootPart
 			local CharacterRoot, Visible = MyView:WorldToViewportPoint(v[_G.AimPart].Position)
+			local charrot  =workspace.Const.Ignore.LocalCharacter.HumanoidRootPart
+			CharacterRoot= charrot
 			if Visible then
-				local RealMag = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(CharacterRoot.X, CharacterRoot.Y)).Magnitude
+				local RealMag = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(charrot.X, charrot.Y)).Magnitude
 				if RealMag < dist and RealMag < FOVCircle.Radius then
 					dist = RealMag
 					Target = v
-					sound:Play()
 				end
 			end
 		end
@@ -360,7 +361,6 @@ UIS.InputBegan:Connect(function(bind)
 			Active = true
 			Lock = true
 			if Active then
-				print("ya")
 				local The_Enemy = FindNearestPlayer()
 				while HoldingM2 do task.wait(.000001)
 					if Lock and The_Enemy ~= nil then

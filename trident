@@ -40,7 +40,9 @@ Rayfield:Notify({
 	Duration = 3.35,
 	Image = "loader",
 })
-wait(3)
+local before = tonumber(game.Workspace.CurrentCamera.FieldOfView)
+wait(2)
+
 local nevidimcigany = Window:CreateTab("Nevidim cigany", "home") -- Title, Image
 local Toggle = nevidimcigany:CreateToggle({
 	Name = "Videt cigany",
@@ -51,7 +53,7 @@ local Toggle = nevidimcigany:CreateToggle({
 			if v:FindFirstChild("Head") then
 				if v.Head:FindFirstChild("ESP") then
 					v.Head.ESP.Enabled = Value
-					v.Head.ESP.tag.Text = "NJ - Cigan"
+					v.Head.ESP.tag.Text = "Cigan"
 					v.Head.ESP.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
 				else
 					local newesp = Instance.new("BillboardGui")
@@ -67,6 +69,14 @@ local Toggle = nevidimcigany:CreateToggle({
 					tag.Size = UDim2.new(1,0,1,0)
 					tag.TextColor3 = Color3.fromRGB(255, 0, 4)
 				end
+			end
+			for i,a in pairs(v:GetChildren()) do
+				local s,f = pcall(function()
+					local selectionboxc=  Instance.new("SelectionBox")
+					selectionboxc.Color3 = Color3.fromRGB(255, 0, 0)
+					selectionboxc.Adornee = a
+					a.Mateial = "Neon"
+				end)
 			end
 		end
 		if Value == true then
@@ -84,6 +94,31 @@ local Toggle = nevidimcigany:CreateToggle({
 				Image = "loader",
 			})
 		end
+		game.Players.PlayerAdded:Connect(function()
+			wait(15)
+			for i,v in pairs(game.Workspace:GetChildren()) do
+				if v:FindFirstChild("Head") then
+					if v.Head:FindFirstChild("ESP") then
+						v.Head.ESP.Enabled = Value
+						v.Head.ESP.tag.Text = "NJ - Cigan"
+						v.Head.ESP.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+					else
+						local newesp = Instance.new("BillboardGui")
+						newesp.Name = "ESP"
+						newesp.Parent = v.Head
+						newesp.MaxDistance = 9999999
+						newesp.AlwaysOnTop = true
+						newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+						newesp.Size = UDim2.new(0, 300, 0, 15)
+						local tag = Instance.new("TextLabel")
+						tag.Name = "tag"
+						tag.Parent = newesp
+						tag.Size = UDim2.new(1,0,1,0)
+						tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+					end
+				end
+			end
+		end)
 	end,
 })
 local Toggle = nevidimcigany:CreateToggle({
@@ -109,6 +144,7 @@ local Toggle = nevidimcigany:CreateToggle({
 							newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
 							newesp.Size = UDim2.new(0, 300, 0, 15)
 							local tag = Instance.new("TextLabel")
+							tag.Text = "TOTEM"
 							tag.Name = "tag"
 							tag.Parent = newesp
 							tag.Size = UDim2.new(1,0,1,0)
@@ -118,5 +154,93 @@ local Toggle = nevidimcigany:CreateToggle({
 				end
 			end
 		end
+		game.Workspace.ChildAdded:Connect(function()
+			for i,v in pairs(workspace:GetChildren()) do
+				if v:IsA("Model") then
+					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
+						for i,a in pairs(v:GetChildren()) do
+							if a:FindFirstChild("totemesp") then
+								a.totemesp.Enabled = Value
+								a.totemesp.tag.Text = "TOTEM"
+								a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+								a.totemesp.BackgroundTransparency = 1
+							else
+								local newesp = Instance.new("BillboardGui")
+								newesp.Name = "totemesp"
+								newesp.Parent = a
+								newesp.MaxDistance = 9999999
+								newesp.AlwaysOnTop = true
+								newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+								newesp.Size = UDim2.new(0, 300, 0, 15)
+								local tag = Instance.new("TextLabel")
+								tag.Text = "TOTEM"
+								tag.Name = "tag"
+								tag.Parent = newesp
+								tag.Size = UDim2.new(1,0,1,0)
+								tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+							end
+						end
+					end
+				end
+			end
+		end)
+	end,
+})
+
+local Toggle = nevidimcigany:CreateToggle({
+	Name = "vetsi fov",
+	CurrentValue = false,
+	Flag = "fov", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+
+		if Value == true then
+			game.Workspace.CurrentCamera.FieldOfView = 120
+		else
+			game.Workspace.CurrentCamera.FieldOfView = before
+		end
+	end,
+})
+local Slider = nevidimcigany:CreateSlider({
+	Name = "Vetsi hitbox",
+	Range = {1, 6},
+	Increment = .5,
+	Suffix = "Bananas",
+	CurrentValue = 1,
+	Flag = "bighitbox", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:IsA("Model") then
+				if v:FindFirstChild("Head") then
+					v.Head.Size = Vector3.new(Value,Value,Value)
+				end
+			end
+		end
+		game.Players.PlayerAdded:Connect(function()
+			wait(10)
+			for i,v in pairs(game.Workspace:GetChildren()) do
+				if v:IsA("Model") then
+					if v:FindFirstChild("Head") then
+						v.Head.Size = Vector3.new(Value,Value,Value)
+					end
+				end
+			end
+		end)
+	end,
+})
+local Toggle = nevidimcigany:CreateToggle({
+	Name = "varuj na zvuk",
+	CurrentValue = false,
+	Flag = "warnsound", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		game.Workspace.ChildAdded:Connect(function(part)
+			if part:IsA("Sound") then
+				Rayfield:Notify({
+					Title = "cigan-hub",
+					Content = "zvuk se ozval "..part.Name,
+					Duration = 2,
+					Image = "triangle-alert",
+				})
+			end
+		end)
 	end,
 })

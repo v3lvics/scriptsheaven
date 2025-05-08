@@ -359,6 +359,7 @@ UIS.InputBegan:Connect(function(bind)
 			Active = true
 			Lock = true
 			if Active then
+				print("ya")
 				local The_Enemy = FindNearestPlayer()
 				while HoldingM2 do task.wait(.000001)
 					if Lock and The_Enemy ~= nil then

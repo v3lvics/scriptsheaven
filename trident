@@ -121,17 +121,19 @@ local Toggle = nevidimcigany:CreateToggle({
 		end)
 	end,
 })
+local totemenabled = false
 local Toggle = nevidimcigany:CreateToggle({
 	Name = "Visible Totems",
 	CurrentValue = false,
 	Flag = "totem", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
+		totemenabled =Value
 		for i,v in pairs(workspace:GetChildren()) do
 			if v:IsA("Model") then
 				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
 					for i,a in pairs(v:GetChildren()) do
 						if a:FindFirstChild("totemesp") then
-							a.totemesp.Enabled = Value
+							a.totemesp.Enabled = totemenabled
 							a.totemesp.tag.Text = "TOTEM"
 							a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
 					
@@ -163,7 +165,7 @@ local Toggle = nevidimcigany:CreateToggle({
 							
 						end
 						if v.Body:FindFirstChild("totemesp") then
-							v.Body.totemesp.Enabled = Value
+							v.Body.totemesp.Enabled = totemenabled
 							v.Body.totemesp.tag.Text = "TOTEM"
 							v.Body.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
 

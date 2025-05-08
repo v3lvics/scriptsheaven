@@ -362,6 +362,8 @@ UIS.InputBegan:Connect(function(bind)
 				local The_Enemy = FindNearestPlayer()
 				while HoldingM2 do task.wait(.000001)
 					if Lock and The_Enemy ~= nil then
+						print(The_Enemy)
+						print(The_Enemy.Name)
 						local Future = The_Enemy.HumanoidRootPart.CFrame + (The_Enemy.HumanoidRootPart.Velocity * Epitaph + HeadOffset)
 						MyView.CFrame = CFrame.lookAt(MyView.CFrame.Position, Future.Position)
 						CursorLock()

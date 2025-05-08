@@ -341,7 +341,8 @@ function FindNearestPlayer()
 				local RealMag = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(CharacterRoot.X, CharacterRoot.Y)).Magnitude
 				if RealMag < dist and RealMag < FOVCircle.Radius then
 					dist = RealMag
-					Target = TheirCharacter
+					Target = v
+					sound:Play()
 				end
 			end
 		end

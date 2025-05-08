@@ -128,41 +128,12 @@ local Toggle = nevidimcigany:CreateToggle({
 	Flag = "totem", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		totemenabled =Value
-		for i,v in pairs(workspace:GetChildren()) do
-			if v:IsA("Model") then
-				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
-					for i,a in pairs(v:GetChildren()) do
-						if a:FindFirstChild("totemesp") then
-							a.totemesp.Enabled = totemenabled
-							a.totemesp.tag.Text = "TOTEM"
-							a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-					
-						else
-							local newesp = Instance.new("BillboardGui")
-							newesp.Name = "totemesp"
-							newesp.Parent = a
-							newesp.MaxDistance = 9999999
-							newesp.AlwaysOnTop = true
-							newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
-							newesp.Size = UDim2.new(0, 300, 0, 15)
-							local ta = Instance.new("TextLabel")
-							ta.Text = "TOTEM"
-							ta.Name = "tag"
-							ta.BackgroundTransparency = 1
-							ta.Parent = newesp
-							ta.Size = UDim2.new(1,0,1,0)
-							ta.TextColor3 = Color3.fromRGB(255, 0, 4)
-						end
-					end
-				end
-			end
-		end
-		game.Workspace.ChildAdded:Connect(function()
+		if totemenabled == true then
 			for i,v in pairs(workspace:GetChildren()) do
 				if v:IsA("Model") then
 					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
 						for i,a in pairs(v:GetChildren()) do
-							
+
 						end
 						if v.Body:FindFirstChild("totemesp") then
 							v.Body.totemesp.Enabled = totemenabled
@@ -188,7 +159,8 @@ local Toggle = nevidimcigany:CreateToggle({
 					end
 				end
 			end
-		end)
+		end
+		
 	end,
 })
 
@@ -220,6 +192,7 @@ local Toggle = nevidimcigany:CreateToggle({
 		end
 	end,
 })
+local HV 
 local Slider = nevidimcigany:CreateSlider({
 	Name = "Bigger Hitbox",
 	Range = {1, 5.5},
@@ -228,6 +201,7 @@ local Slider = nevidimcigany:CreateSlider({
 	CurrentValue = 1,
 	Flag = "bighitbox", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
+		hv = Vector3.new(Value,Value,Value)
 		for i,v in pairs(game.Workspace:GetChildren()) do
 			if v:IsA("Model") then
 				if v:FindFirstChild("Head") then
@@ -236,16 +210,7 @@ local Slider = nevidimcigany:CreateSlider({
 				end
 			end
 		end
-		game.Players.PlayerAdded:Connect(function()
-			wait(10)
-			for i,v in pairs(game.Workspace:GetChildren()) do
-				if v:IsA("Model") then
-					if v:FindFirstChild("Head") then
-						v.Head.Size = Vector3.new(Value,Value,Value)
-					end
-				end
-			end
-		end)
+		
 	end,
 })
 local stmd = false
@@ -267,3 +232,50 @@ local Toggle = nevidimcigany:CreateToggle({
 		stmd = Value
 	end,
 })
+
+
+game.Workspace.ChildAdded:Connect(function()
+	if totemenabled == true then
+		for i,v in pairs(workspace:GetChildren()) do
+			if v:IsA("Model") then
+				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
+					for i,a in pairs(v:GetChildren()) do
+
+					end
+					if v.Body:FindFirstChild("totemesp") then
+						v.Body.totemesp.Enabled = totemenabled
+						v.Body.totemesp.tag.Text = "TOTEM"
+						v.Body.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
+
+					else
+						local newesp = Instance.new("BillboardGui")
+						newesp.Name = "totemesp"
+						newesp.Parent =  v.Body
+						newesp.MaxDistance = 9999999
+						newesp.AlwaysOnTop = true
+						newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
+						newesp.Size = UDim2.new(0, 300, 0, 15)
+						local ta = Instance.new("TextLabel")
+						ta.Text = "TOTEM"
+						ta.Name = "tag"
+						ta.BackgroundTransparency = 1
+						ta.Parent = newesp
+						ta.Size = UDim2.new(1,0,1,0)
+						ta.TextColor3 = Color3.fromRGB(255, 0, 4)
+					end
+				end
+			end
+		end
+	end
+end)
+
+game.Players.PlayerAdded:Connect(function()
+	wait(10)
+	for i,v in pairs(game.Workspace:GetChildren()) do
+		if v:IsA("Model") then
+			if v:FindFirstChild("Head") then
+				v.Head.Size = Vector3.new(HV,HV,HV)
+			end
+		end
+	end
+end)

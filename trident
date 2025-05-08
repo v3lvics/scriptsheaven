@@ -274,7 +274,7 @@ game.Players.PlayerAdded:Connect(function()
 	for i,v in pairs(game.Workspace:GetChildren()) do
 		if v:IsA("Model") then
 			if v:FindFirstChild("Head") then
-				v.Head.Size = Vector3.new(HV,HV,HV)
+				v.Head.Size = Vector3.new(hv,hv,hv)
 			end
 		end
 	end
@@ -285,9 +285,7 @@ local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local MyCharacter = LocalPlayer.Character
-local MyRoot = MyCharacter:FindFirstChild("HumanoidRootPart")
-local MyHumanoid = MyCharacter:FindFirstChild("Humanoid")
+
 local Mouse = LocalPlayer:GetMouse()
 local MyView = Area.CurrentCamera
 local MyTeamColor = LocalPlayer.TeamColor

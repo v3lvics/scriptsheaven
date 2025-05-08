@@ -45,7 +45,7 @@ wait(2)
 
 local nevidimcigany = Window:CreateTab("Nevidim cigany", "home") -- Title, Image
 local Toggle = nevidimcigany:CreateToggle({
-	Name = "Videt cigany",
+	Name = "ESP",
 	CurrentValue = false,
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -122,7 +122,7 @@ local Toggle = nevidimcigany:CreateToggle({
 	end,
 })
 local Toggle = nevidimcigany:CreateToggle({
-	Name = "videt totemy",
+	Name = "Visible Totems",
 	CurrentValue = false,
 	Flag = "totem", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -146,6 +146,7 @@ local Toggle = nevidimcigany:CreateToggle({
 							local tag = Instance.new("TextLabel")
 							tag.Text = "TOTEM"
 							tag.Name = "tag"
+							tag.BackgroundTransparency = 1
 							tag.Parent = newesp
 							tag.Size = UDim2.new(1,0,1,0)
 							tag.TextColor3 = Color3.fromRGB(255, 0, 4)
@@ -175,6 +176,7 @@ local Toggle = nevidimcigany:CreateToggle({
 								local tag = Instance.new("TextLabel")
 								tag.Text = "TOTEM"
 								tag.Name = "tag"
+								tag.BackgroundTransparency = 1
 								tag.Parent = newesp
 								tag.Size = UDim2.new(1,0,1,0)
 								tag.TextColor3 = Color3.fromRGB(255, 0, 4)
@@ -188,7 +190,7 @@ local Toggle = nevidimcigany:CreateToggle({
 })
 
 local Toggle = nevidimcigany:CreateToggle({
-	Name = "vetsi fov",
+	Name = "Bigger FOV",
 	CurrentValue = false,
 	Flag = "fov", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -201,10 +203,10 @@ local Toggle = nevidimcigany:CreateToggle({
 	end,
 })
 local Slider = nevidimcigany:CreateSlider({
-	Name = "Vetsi hitbox",
-	Range = {1, 6},
+	Name = "Bigger Hitbox",
+	Range = {1, 5.5},
 	Increment = .5,
-	Suffix = "Bananas",
+	Suffix = "Size",
 	CurrentValue = 1,
 	Flag = "bighitbox", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -212,6 +214,7 @@ local Slider = nevidimcigany:CreateSlider({
 			if v:IsA("Model") then
 				if v:FindFirstChild("Head") then
 					v.Head.Size = Vector3.new(Value,Value,Value)
+					v.Head.CanCollide=  false
 				end
 			end
 		end
@@ -227,20 +230,22 @@ local Slider = nevidimcigany:CreateSlider({
 		end)
 	end,
 })
+local stmd = false
+game.Workspace.ChildAdded:Connect(function(part)
+	if part:IsA("Sound") and stmd == true then
+		Rayfield:Notify({
+			Title = "Stealth mode",
+			Content = "zvuk se ozval "..part.Name,
+			Duration = 2,
+			Image = "triangle-alert",
+		})
+	end
+end)
 local Toggle = nevidimcigany:CreateToggle({
-	Name = "varuj na zvuk",
+	Name = "Stealth mode",
 	CurrentValue = false,
 	Flag = "warnsound", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		game.Workspace.ChildAdded:Connect(function(part)
-			if part:IsA("Sound") then
-				Rayfield:Notify({
-					Title = "cigan-hub",
-					Content = "zvuk se ozval "..part.Name,
-					Duration = 2,
-					Image = "triangle-alert",
-				})
-			end
-		end)
+		stmd = Value
 	end,
 })

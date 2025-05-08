@@ -134,7 +134,7 @@ local Toggle = nevidimcigany:CreateToggle({
 							a.totemesp.Enabled = Value
 							a.totemesp.tag.Text = "TOTEM"
 							a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-							a.totemesp.BackgroundTransparency = 1
+					
 						else
 							local newesp = Instance.new("BillboardGui")
 							newesp.Name = "totemesp"
@@ -164,7 +164,7 @@ local Toggle = nevidimcigany:CreateToggle({
 								a.totemesp.Enabled = Value
 								a.totemesp.tag.Text = "TOTEM"
 								a.totemesp.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-								a.totemesp.BackgroundTransparency = 1
+						
 							else
 								local newesp = Instance.new("BillboardGui")
 								newesp.Name = "totemesp"

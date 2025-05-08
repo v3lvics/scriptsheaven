@@ -193,11 +193,26 @@ local Toggle = nevidimcigany:CreateToggle({
 })
 
 local Toggle = nevidimcigany:CreateToggle({
-	Name = "Bigger FOV",
+	Name = "Better FOV",
 	CurrentValue = false,
 	Flag = "fov", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-
+		if Value == true then
+			game:GetService("UserInputService").InputBegan:Connect(function(key)
+				if key == Enum.KeyCode.MouseRightButton then
+					wait(.4)
+					local tween = game:GetService("TweenService")
+					tween:Create(game.Workspace.CurrentCamera, TweenInfo.new(1),{FieldOfView = 160}):Play()
+				end
+			end)
+			game:GetService("UserInputService").InputEnded:Connect(function(key)
+				if key == Enum.KeyCode.MouseRightButton then
+					wait(.4)
+					local tween = game:GetService("TweenService")
+					tween:Create(game.Workspace.CurrentCamera, TweenInfo.new(1),{FieldOfView = before}):Play()
+				end
+			end)
+		end
 		if Value == true then
 			game.Workspace.CurrentCamera.FieldOfView = 120
 		else

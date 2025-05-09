@@ -3,9 +3,9 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
 	Name = "cigan-hub",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-	LoadingTitle = "vyčkejte, negři vybíhají",
+	LoadingTitle = "Loading libraries.",
 	LoadingSubtitle = "od lvl 100 boss.",
-	Theme = "AmberGlow", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+	Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	DisableRayfieldPrompts = false,
 	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
@@ -40,138 +40,89 @@ Rayfield:Notify({
 	Duration = 3.35,
 	Image = "loader",
 })
-local before = tonumber(game.Workspace.CurrentCamera.FieldOfView)
-wait(2)
+
+-- locals
 local esp = false
-local nevidimcigany = Window:CreateTab("Nevidim cigany", "home") -- Title, Image
-local Toggle = nevidimcigany:CreateToggle({
-	Name = "ESP",
+local totemesp = false
+local oreesp = false
+local biggerhead = false
+local stealthmode = false
+local xray = false
+local Label = Window:CreateLabel("Exploiting might cause you to lose your account.", 4483362458, Color3.fromRGB(209, 209, 209), false) -- Title, Icon, Color, IgnoreTheme
+local Toggle = Window:CreateToggle({
+	Name = "Player ESP",
 	CurrentValue = false,
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		esp = Value
-		if Value == true then
-			Rayfield:Notify({
-				Title = "cigan-hub",
-				Content = "nacitam esp, dej mi chvili...",
-				Duration = 3,
-				Image = "loader",
-			})
-		else
-			Rayfield:Notify({
-				Title = "cigan-hub",
-				Content = "cerny uz nevidis, hodne stesti.",
-				Duration = 2,
-				Image = "loader",
-			})
-		end
-		wait(2)
-		for i,v in pairs(game.Workspace:GetChildren()) do
-			if v:FindFirstChild("Head") then
-				local highlight = Instance.new("Highlight")
-				highlight.Parent = v.Head
-				highlight.Enabled = esp
-				highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
-			end
-		end
-		
-		
 	end,
 })
-local totemenabled = false
-local Toggle = nevidimcigany:CreateToggle({
-	Name = "Visible Totems",
+local Section = Window:CreateSection("More ESPs")
+local Toggle = Window:CreateToggle({
+	Name = "Totem ESP",
 	CurrentValue = false,
-	Flag = "totem", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "totemesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		totemenabled =Value
-		if totemenabled == true then
-			for i,v in pairs(workspace:GetChildren()) do
-				if v:IsA("Model") then
-					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
-						local highlight = Instance.new("Highlight")
-						highlight.Enabled = esp
-						highlight.Parent = v
-						highlight.OutlineColor = Color3.fromRGB(0, 174, 255)
-						highlight.FillColor = Color3.fromRGB(0, 174, 255)
-					end
-				end
-			end
-		end
-
+		totemesp = Value
 	end,
 })
-
-
-local hv 
-local Slider = nevidimcigany:CreateSlider({
-	Name = "Bigger Hitbox",
-	Range = {1, 5.5},
-	Increment = .5,
-	Suffix = "Size",
-	CurrentValue = 1,
-	Flag = "bighitbox", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		hv = Vector3.new(Value,Value,Value)
-		for i,v in pairs(game.Workspace:GetChildren()) do
-			if v:IsA("Model") then
-				if v:FindFirstChild("Head") then
-					v.Head.Size = Vector3.new(Value,Value,Value)
-					v.Head.CanCollide=  false
-				end
-			end
-		end
-
-	end,
-})
-local stmd = false
-game.Workspace.ChildAdded:Connect(function(part)
-	if part:IsA("Sound") and stmd == true then
-		Rayfield:Notify({
-			Title = "Stealth mode",
-			Content = "zvuk se ozval "..part.Name,
-			Duration = 2,
-			Image = "triangle-alert",
-		})
-	end
-end)
-local Toggle = nevidimcigany:CreateToggle({
-	Name = "Stealth mode",
+local Toggle = Window:CreateToggle({
+	Name = "Ore ESP",
 	CurrentValue = false,
-	Flag = "warnsound", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "oreesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		stmd = Value
+		oreesp = Value
+	end,
+})
+local Toggle = Window:CreateToggle({
+	Name = "X-RAY",
+	CurrentValue = false,
+	Flag = "xray", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		xray = Value
 	end,
 })
 
+local function opendiag()
+	local Diagnostics = Rayfield:CreateWindow({
+		Name = "Diagnostics",
+		Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+		LoadingTitle = "Installing...",
+		LoadingSubtitle = "V1.24",
+		Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
-game.Workspace.ChildAdded:Connect(function()
-	if totemenabled == true then
-		for i,v in pairs(workspace:GetChildren()) do
-			if v:IsA("Model") then
-				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
-					local highlight = Instance.new("Highlight")
-					highlight.Enabled = totemenabled
-					highlight.Parent = v
-				end
-			end
-		end
-	end
-end)
+		DisableRayfieldPrompts = false,
+		DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
 
-game.Players.PlayerAdded:Connect(function()
-	wait(5)
-	for i,v in pairs(game.Workspace:GetChildren()) do
-		if v:IsA("Model") then
-			if v:FindFirstChild("Head") then
-				v.Head.Size = Vector3.new(hv,hv,hv)
-				if esp == true then
-					local highlight = Instance.new("Highlight")
-					highlight.Enabled = esp
-					highlight.Parent = v
-					highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
-				end
-			end
-		end
-	end
-end)
+		ConfigurationSaving = {
+			Enabled = true,
+			FolderName = nil, -- Create a custom folder for your hub/game
+			FileName = "Big Hub"
+		},
+
+		Discord = {
+			Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+			Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+			RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+		},
+
+		KeySystem = false, -- Set this to true to use our key system
+		KeySettings = {
+			Title = "Untitled",
+			Subtitle = "Key System",
+			Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+			FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+			SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+			GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+			Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+		}
+	})
+end
+
+local diagffnos = Window:CreateSection("Diagnostics")
+local Button = Window:CreateButton({
+	Name = "Open diagnostics",
+	Callback = function()
+		
+	end,
+})

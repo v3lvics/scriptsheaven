@@ -1,6 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
+local Ass = Rayfield:CreateWindow({
 	Name = "cigan-hub",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
 	LoadingTitle = "Loading libraries.",
@@ -42,6 +42,7 @@ Rayfield:Notify({
 })
 
 -- locals
+local Window = Ass:CreateTab("Home", "home") -- Title, Image
 local esp = false
 local totemesp = false
 local oreesp = false

@@ -134,6 +134,7 @@ local Toggle = Tab:CreateToggle({
 	Flag = "oreesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		oreesp = Value
+		wait()
 
 		-- main loop
 		for _, model in ipairs(workspace:GetChildren()) do
@@ -192,6 +193,7 @@ local Toggle = Tab:CreateToggle({
 							txt.Text               = "I"
 
 							gui.Enabled = totemesp
+							part.Tag.Enabled = oreesp
 						end
 
 						-- white totem → “N”
@@ -216,6 +218,7 @@ local Toggle = Tab:CreateToggle({
 							txt.Text               = "N"
 
 							gui.Enabled = totemesp
+							part.Tag.Enabled = oreesp
 						end
 					end
 				end
@@ -375,95 +378,58 @@ game.Workspace.ChildAdded:Connect(function(part)
 		end
 	end
 end)
+-- assume oreesp and totemesp are defined elsewhere
 local showores = coroutine.create(function()
-	if oreesp == true then
-		for _, model in ipairs(workspace:GetChildren()) do
-			if not model:IsA("Model") then
-				continue
+	while wait(7) do
+		if not oreesp then
+			continue
+		end
+
+		-- gather only the MeshParts matching our criteria
+		local parts = {}
+		for _, obj in ipairs(workspace:GetDescendants()) do
+			if obj:IsA("MeshPart")
+				and obj.MeshId == "rbxassetid://12939036056"
+				and (obj.Color == Color3.fromRGB(199,172,120)
+					or obj.Color == Color3.fromRGB(248,248,248))
+			then
+				table.insert(parts, obj)
 			end
+		end
 
-			-- count how many BaseParts this model has
-			local partCount = 0
-			for _, child in ipairs(model:GetChildren()) do
-				if child:IsA("BasePart") then
-					partCount += 1
-				end
-			end
+		-- process each relevant part
+		for _, part in ipairs(parts) do
+			-- if we already made a Tag, just toggle it
+			local tagGui = part:FindFirstChild("Tag")
+			if tagGui then
+				tagGui.Enabled = oreesp
+			else
+				-- build it once
+				local gui = Instance.new("BillboardGui")
+				gui.Name                    = "Tag"
+				gui.Parent                  = part
+				gui.AlwaysOnTop             = true
+				gui.Adornee                 = part
+				gui.Size                    = UDim2.new(0, 300, 0, 15)
+				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+				gui.MaxDistance            = 99999
 
-			-- require at least two parts
-			if partCount < 2 then
-				continue
-			end
+				local txt = Instance.new("TextLabel")
+				txt.Size                   = UDim2.new(1, 0, 1, 0)
+				txt.Parent                 = gui
+				txt.BackgroundTransparency = 1
+				txt.TextColor3             = part.Color
+				txt.Text                   = (part.Color == Color3.fromRGB(199,172,120)) and "I" or "N"
 
-			-- now process each part
-			for _, part in ipairs(model:GetChildren()) do
-				-- skip non‐parts right away
-				if not part:IsA("BasePart") then
-					continue
-				end
-
-				-- ignore gray parts
-				if part.Color == Color3.fromRGB(72,72,72) then
-					continue
-				end
-
-				-- only care about our specific mesh
-				if part:IsA("MeshPart")
-					and part.MeshId == "rbxassetid://12939036056"
-				then
-					-- skin-tone totem → “I”
-					if part.Color == Color3.fromRGB(199,172,120) then
-						if part:FindFirstChild("Tag") then
-							part.Tag.Enabled = oreesp
-						else
-							local gui = Instance.new("BillboardGui")
-							gui.Name                       = "Tag"
-							gui.Parent                     = part
-							gui.AlwaysOnTop                = true
-							gui.Adornee                    = part
-							gui.Size                       = UDim2.new(0, 300, 0, 15)
-							gui.ExtentsOffsetWorldSpace    = Vector3.new(0, 0.25, 0)
-							gui.MaxDistance               = 99999
-
-							local txt = Instance.new("TextLabel")
-							txt.Size               = UDim2.new(1,0,1,0)
-							txt.Parent             = gui
-							txt.BackgroundTransparency = 1
-							txt.TextColor3         = Color3.fromRGB(199,172,120)
-							txt.Text               = "I"
-
-							gui.Enabled = totemesp
-						end
-
-						-- white totem → “N”
-					elseif part.Color == Color3.fromRGB(248,248,248) then
-						if part:FindFirstChild("Tag") then
-							part.Tag.Enabled = oreesp
-						else
-							local gui = Instance.new("BillboardGui")
-							gui.Name                       = "Tag"
-							gui.Parent                     = part
-							gui.AlwaysOnTop                = true
-							gui.Adornee                    = part
-							gui.Size                       = UDim2.new(0, 300, 0, 15)
-							gui.ExtentsOffsetWorldSpace    = Vector3.new(0, 0.25, 0)
-							gui.MaxDistance               = 99999
-
-							local txt = Instance.new("TextLabel")
-							txt.Size               = UDim2.new(1,0,1,0)
-							txt.Parent             = gui
-							txt.BackgroundTransparency = 1
-							txt.TextColor3         = Color3.fromRGB(248,248,248)
-							txt.Text               = "N"
-
-							gui.Enabled = totemesp
-						end
-					end
-				end
+				gui.Enabled = totemesp
 			end
 		end
 	end
 end)
+
+-- start it
+--coroutine.resume(showores)
+
 local checktotems = coroutine.create(function()
 	while wait(5) do
 		if totemesp == true then
@@ -589,20 +555,17 @@ local checkplayersesp = coroutine.create(function()
 end)
 
 local Toggle = Tab:CreateToggle({
-	Name = "Let me see",
+	Name = "Let there be light 💡",
 	CurrentValue = false,
 	Flag = "morelight", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
-		xray = Value
-
-		for i,v in pairs(game.Workspace.Const.Ignore.HLPart:GetChildren()) do
-			v.Enabled = true
-			v.Range = 60
-			v.Shadows = false
+		if Value == true then
+			game.Lighting.ExposureCompensation = 3
+		else
+			game.Lighting.ExposureCompensation = 0
 		end
 	end,
 })
-coroutine.resume(showores)
 coroutine.resume(checkplayersesp)
 coroutine.resume(checktotems)
 Rayfield:Notify({

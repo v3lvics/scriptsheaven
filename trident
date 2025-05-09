@@ -68,37 +68,13 @@ local Toggle = nevidimcigany:CreateToggle({
 		wait(2)
 		for i,v in pairs(game.Workspace:GetChildren()) do
 			if v:FindFirstChild("Head") then
-				local highlight = v.Highlight or Instance.new("Highlight")
+				local highlight = Instance.new("Highlight")
 				highlight.Enabled = esp
 				highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
 			end
 		end
 		
-		game.Players.PlayerAdded:Connect(function()
-			wait(15)
-			for i,v in pairs(game.Workspace:GetChildren()) do
-				if v:FindFirstChild("Head") then
-					if v.Head:FindFirstChild("ESP") then
-						v.Head.ESP.Enabled = Value
-						v.Head.ESP.tag.Text = "Cigan"
-						v.Head.ESP.tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-					else
-						local newesp = Instance.new("BillboardGui")
-						newesp.Name = "ESP"
-						newesp.Parent = v.Head
-						newesp.MaxDistance = 9999999
-						newesp.AlwaysOnTop = true
-						newesp.ExtentsOffsetWorldSpace = Vector3.new(0, 1.25, 0)
-						newesp.Size = UDim2.new(0, 300, 0, 15)
-						local tag = Instance.new("TextLabel")
-						tag.Name = "tag"
-						tag.Parent = newesp
-						tag.Size = UDim2.new(1,0,1,0)
-						tag.TextColor3 = Color3.fromRGB(255, 0, 4)
-					end
-				end
-			end
-		end)
+		
 	end,
 })
 local totemenabled = false
@@ -112,7 +88,7 @@ local Toggle = nevidimcigany:CreateToggle({
 			for i,v in pairs(workspace:GetChildren()) do
 				if v:IsA("Model") then
 					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
-						local highlight = v.Highlight or Instance.new("Highlight")
+						local highlight = Instance.new("Highlight")
 						highlight.Enabled = esp
 						highlight.OutlineColor = Color3.fromRGB(0, 174, 255)
 						highlight.FillColor = Color3.fromRGB(0, 174, 255)
@@ -172,7 +148,7 @@ game.Workspace.ChildAdded:Connect(function()
 		for i,v in pairs(workspace:GetChildren()) do
 			if v:IsA("Model") then
 				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
-					local highlight = v.Highlight or Instance.new("Highlight")
+					local highlight = Instance.new("Highlight")
 					highlight.Enabled = totemenabled
 				end
 			end
@@ -187,7 +163,7 @@ game.Players.PlayerAdded:Connect(function()
 			if v:FindFirstChild("Head") then
 				v.Head.Size = Vector3.new(hv,hv,hv)
 				if esp == true then
-					local highlight = v.Highlight or Instance.new("Highlight")
+					local highlight = Instance.new("Highlight")
 					highlight.Enabled = esp
 					highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
 				end

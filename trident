@@ -48,7 +48,6 @@ local oreesp = false
 local biggerhead = false
 local stealthmode = false
 local xray = false
-local Label = Window:CreateLabel("Exploiting might cause you to lose your account.", 4483362458, Color3.fromRGB(209, 209, 209), false) -- Title, Icon, Color, IgnoreTheme
 local Toggle = Window:CreateToggle({
 	Name = "Player ESP",
 	CurrentValue = false,

@@ -119,7 +119,6 @@ local function opendiag()
 	})
 end
 
-local diagffnos = Tab:CreateSection("Diagnostics")
 local Button = Tab:CreateButton({
 	Name = "Open diagnostics",
 	Callback = function()

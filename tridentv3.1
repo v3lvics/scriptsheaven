@@ -1,0 +1,575 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+	Name = " ",
+	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+	LoadingTitle = "Downloading",
+	LoadingSubtitle = "V1.3",
+	Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+	DisableRayfieldPrompts = false,
+	DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = nil, -- Create a custom folder for your hub/game
+		FileName = "ciganhub"
+	},
+
+	Discord = {
+		Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+		Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+	},
+
+	KeySystem = true, -- Set this to true to use our key system
+	KeySettings = {
+		Title = "Authentication",
+		Subtitle = "Verify your permissions",
+		Note = "", -- Use this to tell the user how to get a key
+		FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+		SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		Key = {"negr"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+	}
+})
+
+Rayfield:Notify({
+	Title = "cigan-hub",
+	Content = "příprava šéfe...",
+	Duration = 3.35,
+	Image = "loader",
+})
+
+-- locals
+local Tab = Window:CreateTab("Home", "home") -- Title, Image
+local esp = false
+local totemesp = false
+local oreesp = false
+local biggerhead = false
+local stealthmode = false
+local xray = false
+local headsize = 1
+local Toggle = Tab:CreateToggle({
+	Name = "Player ESP",
+	CurrentValue = false,
+	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		esp = Value
+
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:IsA("Model") and v:FindFirstChild("Head") and v:FindFirstChild("HumanoidRootPart") then
+
+				if v:FindFirstChild("Highlight") then
+					v.Highlight.Enabled = Value
+				else
+					local hig = Instance.new("Highlight")
+					hig.Parent = v
+					hig.Enabled = Value
+					hig.OutlineColor = Color3.fromRGB(255,0,0)
+				end
+
+
+				if v:FindFirstChild("Tag") then
+					v.Tag.Enabled = Value
+				else
+					local hig = Instance.new("BillboardGui")
+					hig.Name = "Tag"
+					hig.Parent = v
+					hig.AlwaysOnTop = true
+					hig.Adornee = v
+					hig.Size =  UDim2.new(0, 300, 0, 15)
+					hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+					hig.MaxDistance = 99999
+					local text = Instance.new("TextLabel")
+					text.Size = UDim2.new(1,0,1,0)
+					text.Parent = hig
+					text.BackgroundTransparency = 1
+					text.TextColor3 = Color3.fromRGB(255, 0, 0)
+					text.Text = "."
+
+				end
+			end
+		end
+	end,
+})
+local Section = Tab:CreateSection("More ESPs")
+local Toggle = Tab:CreateToggle({
+	Name = "Totem ESP",
+	CurrentValue = false,
+	Flag = "totemesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		totemesp = Value
+
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:IsA("Model") and v:FindFirstChild("Body") and v.Body:FindFirstChild("Whisper") then
+				if v:FindFirstChild("Tag") then
+					v.Tag.Enabled = Value
+				else
+					local hig = Instance.new("BillboardGui")
+					hig.Name = "Tag"
+					hig.Parent = v
+					hig.AlwaysOnTop = true
+					hig.Adornee = v
+					hig.Size =  UDim2.new(0, 400, 0, 25)
+					hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+					hig.MaxDistance = 99999
+					local text = Instance.new("TextLabel")
+					text.Size = UDim2.new(1,0,1,0)
+					text.Parent = hig
+					text.BackgroundTransparency = 1
+					text.TextColor3 = Color3.fromRGB(114, 255, 92)
+					text.Text = "T"
+					hig.Enabled = totemesp
+
+				end
+			end
+		end
+
+	end,
+})
+local Toggle = Tab:CreateToggle({
+	Name = "Ore ESP",
+	CurrentValue = false,
+	Flag = "oreesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		oreesp = Value
+		wait()
+
+		-- main loop
+		for _, model in ipairs(workspace:GetChildren()) do
+			if not model:IsA("Model") then
+				continue
+			end
+
+			-- count how many BaseParts this model has, and count grays
+			local partCount = 0
+			local grayCount = 0
+			for _, child in ipairs(model:GetChildren()) do
+				if child:IsA("BasePart") then
+					partCount += 1
+					if child.Color == Color3.fromRGB(72,72,72) then
+						grayCount += 1
+					end
+				end
+			end
+
+			-- require at least two parts
+			if partCount < 2 then
+				continue
+			end
+
+			-- if two or more gray parts, we’ll label “S”
+			local useStrikeLabel = (grayCount >= 2)
+
+			-- now process each part
+			for _, part in ipairs(model:GetChildren()) do
+				-- skip non-parts right away
+				if not part:IsA("BasePart") then
+					continue
+				end
+
+				-- if not in “S” mode, still ignore lonely gray parts
+				if not useStrikeLabel and part.Color == Color3.fromRGB(72,72,72) then
+					continue
+				end
+
+				-- only care about our specific MeshPart
+				if part:IsA("MeshPart")
+					and part.MeshId == "rbxassetid://12939036056"
+				then
+					-- decide label text & color
+					local labelText, textColor
+					if useStrikeLabel then
+						labelText = "S"
+						textColor = Color3.fromRGB(72,72,72)
+					elseif part.Color == Color3.fromRGB(199,172,120) then
+						labelText = "I"
+						textColor = part.Color
+					elseif part.Color == Color3.fromRGB(248,248,248) then
+						labelText = "N"
+						textColor = part.Color
+					else
+						-- anything else we skip
+						continue
+					end
+
+					-- reuse existing Tag or create new one
+					if part:FindFirstChild("Tag") then
+						part.Tag.Enabled = totemesp
+					else
+						local gui = Instance.new("BillboardGui")
+						gui.Name                    = "Tag"
+						gui.Parent                  = part
+						gui.AlwaysOnTop             = true
+						gui.Adornee                 = part
+						gui.Size                    = UDim2.new(0, 300, 0, 15)
+						gui.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+						gui.MaxDistance            = 99999
+
+						local txt = Instance.new("TextLabel")
+						txt.Size                   = UDim2.new(1,0,1,0)
+						txt.Parent                 = gui
+						txt.BackgroundTransparency = 1
+						txt.TextColor3             = textColor
+						txt.Text                   = labelText
+
+						gui.Enabled = totemesp
+					end
+
+					-- final on/off per oreesp
+					part.Tag.Enabled = oreesp
+				end
+			end
+		end
+
+
+
+	end,
+})
+local Toggle = Tab:CreateToggle({
+	Name = "X-RAY",
+	CurrentValue = false,
+	Flag = "xray", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		xray = Value
+
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:IsA("Model") and v:FindFirstChild("Hitbox") then
+				if Value == true then
+					v.Hitbox.Transparency = .8
+				else
+					v.Hitbox.Transparency = 0
+				end
+			end
+		end
+	end,
+})
+local Slider = Tab:CreateSlider({
+	Name = "Bigger Heads",
+	Range = {0, 6},
+	Increment = .1,
+	Suffix = "Size",
+	CurrentValue = 1,
+	Flag = "bigheads", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		headsize = Value
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:IsA("Model") and v:FindFirstChild("Head") then
+				v.Head.Size = Vector3.new(headsize,headsize,headsize)
+				v.Head.Transparency = .65
+				v.Head.CanCollide = false
+			end
+		end
+	end,
+})
+local Toggle = Tab:CreateToggle({
+	Name = "See sounds  /  Stealth mode",
+	CurrentValue = false,
+	Flag = "seesounds", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		stealthmode = Value
+
+	end,
+})
+
+-- LOCAL FUNCTIONS PLAYER ADDED ETC. make it all work when its added. 
+game.Players.PlayerAdded:Connect(function(player)
+	wait(10)
+	for i,v in pairs(game.Workspace:GetChildren()) do
+		if v:IsA("Model") and v:FindFirstChild("Head") then
+			v.Head.Size = Vector3.new(headsize,headsize,headsize)
+			v.Head.Transparency = .65
+			v.Head.CanCollide = false
+		end
+	end
+end)
+
+game.Workspace.ChildAdded:Connect(function(part)
+	wait()
+	local v = part
+	if part:IsA("Sound") then
+		if stealthmode == true then
+			Rayfield:Notify({
+				Title = "Stealth Mode",
+				Content = "Sound - "..part.Name,
+				Duration = 1,
+				Image = "ear",
+			})
+		end
+	end
+
+
+	if part:IsA("Model") then
+
+		if part:FindFirstChild("Hitbox") then
+			if xray == true then
+				part.Hitbox.Transparency = .8
+			else
+				part.Hitbox.Transparency = 0
+			end
+		end
+
+	end
+
+	if v:IsA("Model") and v:FindFirstChild("Head") and v:FindFirstChild("HumanoidRootPart") then
+
+		if v:FindFirstChild("Highlight") then
+			v.Highlight.Enabled = esp
+		else
+			local hig = Instance.new("Highlight")
+			hig.Parent = v
+			hig.Enabled = esp
+			hig.OutlineColor = Color3.fromRGB(255,0,0)
+			hig.Enabled = esp
+		end
+
+
+		if v:FindFirstChild("Tag") then
+			v.Tag.Enabled = esp
+		else
+			local hig = Instance.new("BillboardGui")
+			hig.Name = "Tag"
+			hig.Parent = v
+			hig.AlwaysOnTop = true
+			hig.Adornee = v
+			hig.Size =  UDim2.new(0, 300, 0, 15)
+			hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+			hig.MaxDistance = 99999
+			local text = Instance.new("TextLabel")
+			text.Size = UDim2.new(1,0,1,0)
+			text.Parent = hig
+			text.BackgroundTransparency = 1
+			text.TextColor3 = Color3.fromRGB(255, 0, 0)
+			text.Text = "."
+			hig.Enabled = esp
+		end
+	end
+	if v:IsA("Model") and v:FindFirstChild("Body") and v.Body:FindFirstChild("Whisper") then
+		if v:FindFirstChild("Tag") then
+			v.Tag.Enabled = totemesp
+			wait()
+			if v.Tag.Enabled == totemesp then
+				Rayfield:Notify({
+					Title = "cigan-hub",
+					Content = "Nový totem",
+					Duration = 3.35,
+					Image = "home",
+				})
+			end
+		else
+			local hig = Instance.new("BillboardGui")
+			hig.Name = "Tag"
+			hig.Parent = v
+			hig.AlwaysOnTop = true
+			hig.Adornee = v
+			hig.Size =  UDim2.new(0, 400, 0, 25)
+			hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+			hig.MaxDistance = 99999
+			local text = Instance.new("TextLabel")
+			text.Size = UDim2.new(1,0,1,0)
+			text.Parent = hig
+			text.BackgroundTransparency = 1
+			text.TextColor3 = Color3.fromRGB(114, 255, 92)
+			text.Text = "T"
+			hig.Enabled = totemesp
+
+		end
+	end
+end)
+-- assume oreesp and totemesp are defined elsewhere
+local showores = coroutine.create(function()
+	while wait(7) do
+		if not oreesp then
+			continue
+		end
+
+		-- gather only the MeshParts matching our criteria
+		local parts = {}
+		for _, obj in ipairs(workspace:GetDescendants()) do
+			if obj:IsA("MeshPart")
+				and obj.MeshId == "rbxassetid://12939036056"
+				and (obj.Color == Color3.fromRGB(199,172,120)
+					or obj.Color == Color3.fromRGB(248,248,248))
+			then
+				table.insert(parts, obj)
+			end
+		end
+
+		-- process each relevant part
+		for _, part in ipairs(parts) do
+			-- if we already made a Tag, just toggle it
+			local tagGui = part:FindFirstChild("Tag")
+			if tagGui then
+				tagGui.Enabled = oreesp
+			else
+				-- build it once
+				local gui = Instance.new("BillboardGui")
+				gui.Name                    = "Tag"
+				gui.Parent                  = part
+				gui.AlwaysOnTop             = true
+				gui.Adornee                 = part
+				gui.Size                    = UDim2.new(0, 300, 0, 15)
+				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+				gui.MaxDistance            = 99999
+
+				local txt = Instance.new("TextLabel")
+				txt.Size                   = UDim2.new(1, 0, 1, 0)
+				txt.Parent                 = gui
+				txt.BackgroundTransparency = 1
+				txt.TextColor3             = part.Color
+				txt.Text                   = (part.Color == Color3.fromRGB(199,172,120)) and "I" or "N"
+
+				gui.Enabled = totemesp
+			end
+		end
+	end
+end)
+
+-- start it
+--coroutine.resume(showores)
+
+local checktotems = coroutine.create(function()
+	while wait(5) do
+		if totemesp == true then
+			for i,v in pairs(game.Workspace:GetChildren()) do
+				if v:FindFirstChild("Body") and v.Body:FindFirstChild("Whisper") and v.Body.Whisper.Playing == true then
+					if v:FindFirstChild("Tag") then
+						v.Tag:Destroy()
+						local hig = Instance.new("BillboardGui")
+						hig.Name = "Tag"
+						hig.Parent = v
+						hig.AlwaysOnTop = true
+						hig.Adornee = v
+						hig.Size =  UDim2.new(0, 400, 0, 35)
+						hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.35, 0)
+						hig.MaxDistance = 99999
+						local text = Instance.new("TextLabel")
+						text.Size = UDim2.new(1,0,1,0)
+						text.Parent = hig
+						text.BackgroundTransparency = 1
+						text.TextColor3 = Color3.fromRGB(0, 242, 255)
+						text.Text = "!"
+						hig.Enabled = totemesp
+					else
+						local hig = Instance.new("BillboardGui")
+						hig.Name = "Tag"
+						hig.Parent = v
+						hig.AlwaysOnTop = true
+						hig.Adornee = v
+						hig.Size =  UDim2.new(0, 400, 0, 35)
+						hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.35, 0)
+						hig.MaxDistance = 99999
+						local text = Instance.new("TextLabel")
+						text.Size = UDim2.new(1,0,1,0)
+						text.Parent = hig
+						text.BackgroundTransparency = 1
+						text.TextColor3 = Color3.fromRGB(0, 242, 255)
+						text.Text = "!"
+						hig.Enabled = totemesp
+
+					end
+					if v.Tag.TextLabel.TextColor3 == Color3.fromRGB(0,242,255) then
+						Rayfield:Notify({
+							Title = "Totem ESP",
+							Content = "Jeden totem umírá. Je označen modře.",
+							Duration = 2,
+							Image = "rss",
+						})
+					else
+						
+					end
+					if v.Body.Whisper.Playing == false then
+						v.Tag:Destroy()
+						local hig = Instance.new("BillboardGui")
+						hig.Name = "Tag"
+						hig.Parent = v
+						hig.AlwaysOnTop = true
+						hig.Adornee = v
+						hig.Size =  UDim2.new(0, 400, 0, 25)
+						hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+						hig.MaxDistance = 99999
+						local text = Instance.new("TextLabel")
+						text.Size = UDim2.new(1,0,1,0)
+						text.Parent = hig
+						text.BackgroundTransparency = 1
+						text.TextColor3 = Color3.fromRGB(114, 255, 92)
+						text.Text = "T"
+						hig.Enabled = totemesp
+					end
+				end
+			end
+		end
+	end
+end)
+local checkplayersesp = coroutine.create(function()
+	while wait(5) do
+		if esp == true then
+			for i,v in pairs(game.Workspace:GetChildren()) do
+				if v:IsA("Model") and v:FindFirstChild("Head") then
+					v.Head.Size = Vector3.new(headsize,headsize,headsize)
+					v.Head.Transparency = .65
+					v.Head.CanCollide = false
+					if v:FindFirstChild("Highlight") then
+						v.Highlight.Enabled = esp
+					else
+						local hig = Instance.new("Highlight")
+						hig.Parent = v
+						hig.Enabled = esp
+						hig.OutlineColor = Color3.fromRGB(255,0,0)
+						hig.Enabled = esp
+					end
+
+
+					if v:FindFirstChild("Tag") then
+						v.Tag.Enabled = esp
+					else
+						local hig = Instance.new("BillboardGui")
+						hig.Name = "Tag"
+						hig.Parent = v
+						hig.AlwaysOnTop = true
+						hig.Adornee = v
+						hig.Size =  UDim2.new(0, 300, 0, 15)
+						hig.ExtentsOffsetWorldSpace = Vector3.new(0, 0.25, 0)
+						hig.MaxDistance = 99999
+						local text = Instance.new("TextLabel")
+						text.Size = UDim2.new(1,0,1,0)
+						text.Parent = hig
+						text.BackgroundTransparency = 1
+						text.TextColor3 = Color3.fromRGB(255, 0, 0)
+						text.Text = "."
+						hig.Enabled = esp
+					end
+				end
+			end
+			for i,v in pairs(game.Workspace:GetChildren()) do
+				if v:IsA("Model") and v:FindFirstChild("Head") then
+					v.Head.Size = Vector3.new(headsize,headsize,headsize)
+					v.Head.Transparency = .65
+					v.Head.CanCollide = false
+				end
+			end
+		end
+	end
+end)
+
+local Toggle = Tab:CreateToggle({
+	Name = "Let there be light 💡",
+	CurrentValue = false,
+	Flag = "morelight", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		if Value == true then
+			game.Lighting.ExposureCompensation = 3
+		else
+			game.Lighting.ExposureCompensation = 0
+		end
+	end,
+})
+coroutine.resume(checkplayersesp)
+coroutine.resume(checktotems)
+Rayfield:Notify({
+	Title = "cigan-hub",
+	Content = "vše ready",
+	Duration = 3.35,
+	Image = "check",
+})

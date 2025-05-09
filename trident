@@ -69,6 +69,7 @@ local Toggle = nevidimcigany:CreateToggle({
 		for i,v in pairs(game.Workspace:GetChildren()) do
 			if v:FindFirstChild("Head") then
 				local highlight = Instance.new("Highlight")
+				highlight.Parent = v.Head
 				highlight.Enabled = esp
 				highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
 			end
@@ -90,6 +91,7 @@ local Toggle = nevidimcigany:CreateToggle({
 					if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
 						local highlight = Instance.new("Highlight")
 						highlight.Enabled = esp
+						highlight.Parent = v
 						highlight.OutlineColor = Color3.fromRGB(0, 174, 255)
 						highlight.FillColor = Color3.fromRGB(0, 174, 255)
 					end
@@ -150,6 +152,7 @@ game.Workspace.ChildAdded:Connect(function()
 				if v:FindFirstChild("Body") and v:FindFirstChild("State") and v:FindFirstChild("Base") then
 					local highlight = Instance.new("Highlight")
 					highlight.Enabled = totemenabled
+					highlight.Parent = v
 				end
 			end
 		end
@@ -165,6 +168,7 @@ game.Players.PlayerAdded:Connect(function()
 				if esp == true then
 					local highlight = Instance.new("Highlight")
 					highlight.Enabled = esp
+					highlight.Parent = v
 					highlight.OutlineColor = Color3.fromRGB(255, 0, 0)
 				end
 			end

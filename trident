@@ -1,10 +1,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Ass = Rayfield:CreateWindow({
+local Window = Rayfield:CreateWindow({
 	Name = "cigan-hub",
 	Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-	LoadingTitle = "Loading libraries.",
-	LoadingSubtitle = "od lvl 100 boss.",
+	LoadingTitle = "Downloading",
+	LoadingSubtitle = "V1.1",
 	Theme = "Amethyst", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
 	DisableRayfieldPrompts = false,
@@ -42,14 +42,14 @@ Rayfield:Notify({
 })
 
 -- locals
-local Window = Ass:CreateTab("Home", "home") -- Title, Image
+local Tab = Window:CreateTab("Home", "home") -- Title, Image
 local esp = false
 local totemesp = false
 local oreesp = false
 local biggerhead = false
 local stealthmode = false
 local xray = false
-local Toggle = Window:CreateToggle({
+local Toggle = Tab:CreateToggle({
 	Name = "Player ESP",
 	CurrentValue = false,
 	Flag = "esp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -57,8 +57,8 @@ local Toggle = Window:CreateToggle({
 		esp = Value
 	end,
 })
-local Section = Window:CreateSection("More ESPs")
-local Toggle = Window:CreateToggle({
+local Section = Tab:CreateSection("More ESPs")
+local Toggle = Tab:CreateToggle({
 	Name = "Totem ESP",
 	CurrentValue = false,
 	Flag = "totemesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -66,7 +66,7 @@ local Toggle = Window:CreateToggle({
 		totemesp = Value
 	end,
 })
-local Toggle = Window:CreateToggle({
+local Toggle = Tab:CreateToggle({
 	Name = "Ore ESP",
 	CurrentValue = false,
 	Flag = "oreesp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -74,7 +74,7 @@ local Toggle = Window:CreateToggle({
 		oreesp = Value
 	end,
 })
-local Toggle = Window:CreateToggle({
+local Toggle = Tab:CreateToggle({
 	Name = "X-RAY",
 	CurrentValue = false,
 	Flag = "xray", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -123,6 +123,6 @@ local diagffnos = Window:CreateSection("Diagnostics")
 local Button = Window:CreateButton({
 	Name = "Open diagnostics",
 	Callback = function()
-		
+		opendiag()
 	end,
 })
